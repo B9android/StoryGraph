@@ -1,10 +1,16 @@
 import frontmatter
-from pyvis.network import Network
 import os
 import networkx as nx
+import warnings
+import networkx.drawing.nx_pydot
 
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 G = nx.DiGraph()
+
+G.graph['graph'] = {'rankdir': 'LR'}
+G.graph['node'] = {'shape': 'circle', 'color': 'red'}
+G.graph['edges'] = {'arrowsize': '4.0', 'dir': 'forward', 'arrowhead': 'empty'}
 
 path = "../md_testfiles/"
 dir_list = os.listdir(path)
@@ -19,13 +25,11 @@ for file in dir_list:
         if destinations is not None:
             for destination in destinations:
                 edges.append((metadata['title'], destination))
-            G.add_edges_from(edges)
+            G.add_edges_from(edges, arrowhead='empty')
 
-print(G.edges)
+graph = networkx.drawing.nx_pydot.to_pydot(G)
 
-net = Network(directed=True)
-net.from_nx(G)
+graph.set_bgcolor("transparent")
 
-net.toggle_physics(False)
-net.show_buttons(filter_=['physics'])
-net.show('graph.html', notebook=False)
+graph.write_raw("output_raw.dot")
+graph.write_png("output.png")
