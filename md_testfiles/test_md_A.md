@@ -1,4 +1,6 @@
 ---
 title: A
-connected: [B, C]
+connected:
+- B
+- C
 ---

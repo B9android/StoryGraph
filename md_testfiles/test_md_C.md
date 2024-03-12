@@ -1,4 +1,4 @@
 ---
 title: C
-connected: []
+connected:
 ---
